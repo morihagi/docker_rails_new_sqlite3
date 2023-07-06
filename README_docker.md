@@ -6,7 +6,7 @@
 7.0.6
 
 * Database
-sqlite3
+SQlite3
 
 # Run
 1. ターミナルを起動
@@ -19,37 +19,33 @@ sqlite3
     ```
     git clone https://github.com/morihagi/docker_rails_new_sqlite3.git
     ```
-4. Dockerコンテナを作る
+4. rails new
     ```
-    docker compose build
+    docker compose run --no-deps web rails new . --force --skip-test --skip-bundle
     ```
-5. メインのコンテナを起動
+    新しくコンテナが起動して勝手に止まります。メインのコンテナの中に入れたら削除してOKです。
+5. gemのインストール
     ```
-    docker compose up -d
+    docker compose run --no-deps web bundle install --path vendor/bundle
     ```
-    起動はするけど、Railsアプリがないため、すぐに止まります。それでOK。
-6. rails new
+    新しくコンテナが起動して勝手に止まります。メインのコンテナの中に入れたら削除してOKです。
+6. Dockerコンテナを作る&起動
     ```
-    docker compose run web rails new . --force --skip-test --skip-bundle
+    docker compose build -d
     ```
-    ここでメイン以外のコンテナが起動しますが、無視します。メインのコンテナの中で開発に入れたら削除してOK。
-7. gemのインストール
-    ```
-    docker compose run web bundle install --path vendor/bundle
-    ```
-    ここでメイン以外のコンテナが起動しますが、無視します。メインのコンテナの中で開発に入れたら削除してOK。
-8. メインのコンテナを起動
-    ```
-    docker compose up -d
-    ```
-9. Dockerコンテナに入り、開発を進める
+    この時点から`http://localhost:3000/`にアクセスできます。
+7. Dockerコンテナに入る
     ```
     docker compose exec web bash
     ```
-    root@なんちゃらかんちゃら:/app#みたいなのが表示されればコンテナに入れてます
-
-10. その他
-
+    root@なんちゃらかんちゃら:/app#みたいなのが表示されればコンテナに入れてます。
+11. コンテナの中から開発を進める
+    ```
+    root@なんちゃらかんちゃら:/app# rails db:create
+    root@なんちゃらかんちゃら:/app# bundle install
+    ```
+    このようにいつものrailsのコマンドが使えます。
+8.  その他
     - コンテナ内のコマンド例
         ```
         root@なんちゃらかんちゃら:/app# rails db:create
